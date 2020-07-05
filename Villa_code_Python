@@ -1,0 +1,58 @@
+#!/usr/bin/python3
+# Essais de joystick de Blue Dot
+# Version compatible avec Android
+# Eric, le 12/06/20
+# Version 1, cette version à beaucoup évoluer
+# Des sons et des montages à transtor sont intégrés dès la version 2
+# l'intérêt est de commander depuis un Androïd, un nano-odinateur en Bluetooth
+
+from bluedot import BlueDot           
+from gpiozero import LED, PWMLED             
+from signal import pause
+# from time import sleep              
+
+# --- Assignation des pins du GPIO	   
+led1 = LED(27)                        
+#led2 = LED(22)
+led2 = PWMLED(22)
+#led3 = LED(17)                         
+led3 = PWMLED(17)                        
+led4 = LED(23)           
+
+# --- Fonctions           
+def ledoff():                         
+    led1.off()             # led blanc
+    led2.off()             # led bleue
+    led3.off()             # led rouge
+    led4.off()             # led multi
+    
+def dpad(pos):                        
+    if pos.top:                       
+        led1.on()                     
+        print("white led on")         
+
+    elif pos.bottom:                  
+        # led2.on()
+		    led2.pulse()
+        print("blue led on")          
+
+    elif pos.right:                   
+        # led3.on()
+		    # led3.blink()
+		    led3.pulse()
+        print("red led on")           
+
+    elif pos.left:                    
+        led4.on()                     
+        print("multi color led on")   
+
+    elif pos.middle:                  
+        ledoff()                      
+
+ # --- Main                                     
+ 
+bd = BlueDot()             	# création de l'objet           
+bd.when_pressed = dpad      # fonction selon action         
+#bd.when_moved = dpad        # fonction selon action         
+
+pause()                     # attente de la cloture de la connection         
